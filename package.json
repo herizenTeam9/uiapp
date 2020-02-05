@@ -21,6 +21,7 @@
     "@angular/platform-browser": "~8.2.8",
     "@angular/platform-browser-dynamic": "~8.2.8",
     "@angular/router": "~8.2.8",
+    "@ng-bootstrap/ng-bootstrap": "^5.2.1",
     "angular2-datatable": "^0.6.0",
     "bootstrap": "^3.3.7",
     "bootstrap-timepicker": "^0.5.2",
@@ -32,6 +33,8 @@
     "jquery-timepicker": "^1.3.3",
     "jquery-ui-dist": "^1.12.1",
     "jquery-ui-themes": "^1.12.0",
+    "ng2-google-charts": "^5.0.0",
+    "ng2-googlechart": "^2.21.0",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"

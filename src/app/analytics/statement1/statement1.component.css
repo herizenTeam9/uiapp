@@ -1,0 +1,26 @@
+.search-btn {
+    background-color: #00303f !important;
+    color: white;
+    border: none;
+    margin-top:6px;
+    /* margin-left: 0px; */
+  }
+
+  .labels{
+    top: -6px;
+    font-size: 0.75em;
+    color: #009688;
+    font-weight: bold;
+  }
+
+ .placement-card{
+   display: inline-block;
+ }
+ .card-list{
+   display: inline-block;
+   border-radius: 4px;
+  box-shadow: 3px 5px maroon ;
+  }
+  .table{
+    
+  }

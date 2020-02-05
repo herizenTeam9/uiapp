@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AnalyticsService {
   url = environment.baseUrl;
+  constructor(private http: HttpClient) { }
 
-  constructor(private http:HttpClient) { }
   get_academic_years():Observable<any>{
     let ur = `${this.url}academicyear`;
     return this.http.get(ur);
@@ -26,8 +26,12 @@ export class AnalyticsService {
     let ur = `${this.url}placement/${term}/${usn}`;
     return this.http.get(ur);
   }
-  get_attendence_for_student(term,usn,sem):Observable<any>{
-    let ur = `${this.url}attendence/${term}/${usn}/${sem}`;
-    return this.http.get(ur);
+  get_all_ia_marks(term,usn,sem): Observable<any>{
+    let ur = `${this.url}internals/total/${term}/${usn}/${sem}`
+    return this.http.get(ur)
+  }
+  get_ia_marks_per_subject(term,usn,sem,subject): Observable<any>{
+    let ur = `${this.url}internals/${term}/${usn}/${sem}/${subject}`
+    return this.http.get(ur)
   }
 }
