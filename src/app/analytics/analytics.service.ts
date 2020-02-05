@@ -30,4 +30,8 @@ export class AnalyticsService {
     let ur = `${this.url}internals/total/${term}/${usn}/${sem}`
     return this.http.get(ur)
   }
+  get_ia_marks_per_subject(term,usn,sem,subject): Observable<any>{
+    let ur = `${this.url}internals/${term}/${usn}/${sem}/${subject}`
+    return this.http.get(ur)
+  }
 }

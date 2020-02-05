@@ -5,7 +5,7 @@
                 <mat-form-field>
                     <mat-label class="labels">Select year</mat-label>
                     <mat-select name="years" [(ngModel)]="SelectedYear">
-                        <mat-option *ngFor = "let y of academic" [value]="y">{{y}}</mat-option>
+                        <mat-option *ngFor="let y of academic" [value]="y">{{y}}</mat-option>
                     </mat-select>
                 </mat-form-field>
                 <!-- <select class="form-control" name="Year" [(ngModel)]="SelectedYear">
@@ -17,7 +17,7 @@
                 <mat-form-field>
                     <mat-label class="labels">Select sem</mat-label>
                     <mat-select name="sems" [(ngModel)]="SelectedSem">
-                        <mat-option *ngFor = "let y of semester" [value]="y">{{y}}</mat-option>
+                        <mat-option *ngFor="let y of semester" [value]="y">{{y}}</mat-option>
                     </mat-select>
                 </mat-form-field>
                 <!-- <select class="form-control" name="sem" [(ngModel)]="SelectedSem">
@@ -30,12 +30,12 @@
                     <span class="glyphicon glyphicon-search"></span> Search
                   </button>
             </div> -->
-            
+
             <div class="col-md-6">
-            <button class="btn btn-primary search search-btn"  (click)="onSearch()">
-                <i class="fa fa-search ml-0"></i> Search
-            </button>
-            
+                <button class="btn btn-primary search search-btn" (click)="onSearch()">
+                    <i class="fa fa-search ml-0"></i> Search
+                </button>
+
             </div>
         </div>
         <div class="col-md-1">
@@ -46,25 +46,57 @@
     <div class="row">
     </div>
     <div class="row" *ngIf="offers && offers.length >0">
-            <div  class="col-md-2" *ngFor="let o of offers">
-                <div class="card-list">
-                        <mat-card class="placement-card">
-                            <mat-card-header>
-                                <mat-card-title>Company : {{o[0]}}</mat-card-title>
-                            </mat-card-header>
-                            <mat-card-content>
-                                Role : Software Engineer<br>
-                                Salary : {{o[1]}}
-                            </mat-card-content>
-                        </mat-card>
-                </div>
+        <div class="col-md-2" *ngFor="let o of offers">
+            <div class="card-list">
+                <mat-card class="placement-card">
+                    <mat-card-header>
+                        <mat-card-title>Company : {{o[0]}}</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        Role : Software Engineer<br>
+                        Salary : {{o[1]}}
+                    </mat-card-content>
+                </mat-card>
             </div>
-    </div>
-</div>
-    <div class="row">
-        <div *ngIf="firstLevelChart">
-            <p class="page-title"><b>{{title}}</b></p>
-            <google-chart [data]='firstLevelChart' (chartSelect)="second_level($event)">
-            </google-chart>
         </div>
     </div>
+</div>
+<div class="row">
+    <div *ngIf="firstLevelChart">
+        <p class="page-title"><b>{{title}}</b></p>
+        <google-chart [data]='firstLevelChart' (chartSelect)="second_level($event)" data-toggle="modal" data-target="#iaMarks">
+        </google-chart>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="iaMarks" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Internal Assessment Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped">
+                    <tr>
+
+                        <th>IA Number</th>
+                        <th>Max Marks</th>
+                        <th>Marks Obtained</th>
+                    </tr>
+                    <tr *ngFor="let m of markDetails">
+                        <td>{{m[0]}}</td>
+                        <td>{{m[1]}}</td>
+                        <td>{{m[2]}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+  

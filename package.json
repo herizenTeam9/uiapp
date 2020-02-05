@@ -21,6 +21,7 @@
     "@angular/platform-browser": "~8.2.8",
     "@angular/platform-browser-dynamic": "~8.2.8",
     "@angular/router": "~8.2.8",
+    "@ng-bootstrap/ng-bootstrap": "^5.2.1",
     "angular2-datatable": "^0.6.0",
     "bootstrap": "^3.3.7",
     "bootstrap-timepicker": "^0.5.2",

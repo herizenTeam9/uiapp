@@ -3,8 +3,6 @@ import { AnalyticsService } from '../analytics.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { GoogleChartInterface } from 'ng2-google-charts/google-charts-interfaces';
 import { ChartSelectEvent } from 'ng2-google-charts';
-
-
 @Component({
   selector: 'app-statement1',
   templateUrl: './statement1.component.html',
@@ -27,6 +25,10 @@ export class Statement1Component implements OnInit {
   error_flag : boolean = true 
   error_message = "Data not found"
   isPlacementOn = false;
+  selectedSubject;
+  markDetails:any[];
+  closeResult: string;
+
   constructor(private AnalyticsService: AnalyticsService) { }
   
   ngOnInit() {
@@ -112,12 +114,20 @@ export class Statement1Component implements OnInit {
           colors: ["#d3ad5d", "#789d96"],
           fontName: "Times New Roman",
           fontSize: 13,
-
         }
 
       }
   }
   second_level(event: ChartSelectEvent) {
-    console.log("Chart Event", event)
+    this.selectedSubject = event.selectedRowValues[0]
+    this.AnalyticsService.get_ia_marks_per_subject(this.SelectedYear,this.usn,this.SelectedSem,this.selectedSubject).subscribe(res=>{
+      let allMarks = res["marks"]
+      let data = []
+      for(let ia of allMarks){
+        data.push([ia["iaNumber"],ia["outof"],ia["obtained"]])
+      }
+      this.markDetails=data
+      console.log(this.markDetails)
+    })
   }
 }

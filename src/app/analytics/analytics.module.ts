@@ -20,8 +20,7 @@ import { Statement2Component } from './statement2/statement2.component';
     MatSelectModule,
     FormsModule,
     MatCardModule,
-    Ng2GoogleChartsModule
-    
+    Ng2GoogleChartsModule,
     
   ]
 })
