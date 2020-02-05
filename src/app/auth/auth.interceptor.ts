@@ -12,7 +12,6 @@ import { Observable } from 'rxjs';
 export class TokenInterceptor implements HttpInterceptor {
     constructor(public auth: AuthService) { } intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     
-      console.log("Here....")
       let token = this.auth.getToken()
       if (token) {
         request = request.clone({
