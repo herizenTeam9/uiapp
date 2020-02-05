@@ -38,10 +38,6 @@
 
             </div>
         </div>
-        <div class="col-md-1">
-            <button class="back-button" (click)="back_()" *ngIf="chart_visibility" style="margin: 10px;">
-                <span class="fa fa-chevron-left"></span> Back</button>
-        </div>
     </div>
     <div class="row">
     </div>
@@ -71,7 +67,7 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="iaMarks" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+<div class="modal fade" id="iaMarks" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -81,9 +77,9 @@
                     </button>
             </div>
             <div class="modal-body">
+            <div class="h5"> <b>Subject : </b> {{selectedSubject}}</div>
                 <table class="table table-striped">
                     <tr>
-
                         <th>IA Number</th>
                         <th>Max Marks</th>
                         <th>Marks Obtained</th>

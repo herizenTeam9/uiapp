@@ -80,9 +80,7 @@ export class Statement1Component implements OnInit {
     })
   }
 
-  back_() {
-    this.chart_visibility = false
-  }
+
   graph_data(data) {
     this.showSpinner = true
     this.title = 'Course-wise Internal Marks %',
@@ -119,6 +117,7 @@ export class Statement1Component implements OnInit {
       }
   }
   second_level(event: ChartSelectEvent) {
+    if(event.selectedRowValues[0]){
     this.selectedSubject = event.selectedRowValues[0]
     this.AnalyticsService.get_ia_marks_per_subject(this.SelectedYear,this.usn,this.SelectedSem,this.selectedSubject).subscribe(res=>{
       let allMarks = res["marks"]
@@ -129,5 +128,6 @@ export class Statement1Component implements OnInit {
       this.markDetails=data
       console.log(this.markDetails)
     })
+  }
   }
 }

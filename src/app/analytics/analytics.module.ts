@@ -10,9 +10,11 @@ import { Ng2GoogleChartsModule } from "ng2-google-charts";
 import { MatCardModule } from '@angular/material/card';
 import {MatSelectModule} from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
-import { Statement2Component } from './statement2/statement2.component';
 @NgModule({
-  declarations: [Statement1Component, AnalyticsComponent, Statement2Component],
+  declarations: [
+    Statement1Component, 
+    AnalyticsComponent
+  ],
   imports: [
     CommonModule,
     AnalyticsRoutingModule,
