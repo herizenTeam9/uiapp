@@ -7,24 +7,27 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AnalyticsService {
-  baseurl = environment.baseUrl;
+  url = environment.baseUrl;
   constructor(private http: HttpClient) { }
 
-
-  get_academic_years(): Observable<any> {
-    let url = `${this.baseurl}academicyear`;
-    return this.http.get(url);
+  get_academic_years():Observable<any>{
+    let ur = `${this.url}academicyear`;
+    return this.http.get(ur);
+}
+  get_semesters():Observable<any>{
+    let ur = `${this.url}semesters`;
+    return this.http.get(ur);
   }
-
-  get_term_details(): Observable<any> {
-    let url = `${this.baseurl}termNumber`;
-    return this.http.get(url)
-
+  get_usn_by_email(email):Observable<any>{
+    let ur = `${this.url}usn/${email}`;
+    return this.http.get(ur);
   }
-
-  get_attendance_details(usn:string,year:any,terms:any):Observable<any>{
-    let url = `${this.baseurl}attendancedetails/${usn}/${year}/${terms}`
-    return this.http.get(url)
-
+  get_offer_by_usn(term,usn):Observable<any>{
+    let ur = `${this.url}placement/${term}/${usn}`;
+    return this.http.get(ur);
+  }
+  get_all_ia_marks(term,usn,sem): Observable<any>{
+    let ur = `${this.url}internals/total/${term}/${usn}/${sem}`
+    return this.http.get(ur)
   }
 }

@@ -7,7 +7,7 @@ import { AnalyticsComponent } from './analytics.component';
 import { HttpClientModule } from '@angular/common/http';
 import {Ng2GoogleChartModule} from 'ng2-googlechart';
 import { Ng2GoogleChartsModule } from "ng2-google-charts";
-
+import { MatCardModule } from '@angular/material/card';
 import {MatSelectModule} from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { Statement2Component } from './statement2/statement2.component';
@@ -19,6 +19,7 @@ import { Statement2Component } from './statement2/statement2.component';
     HttpClientModule,
     MatSelectModule,
     FormsModule,
+    MatCardModule,
     Ng2GoogleChartsModule
     
     

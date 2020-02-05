@@ -11,76 +11,79 @@ import { ChartSelectEvent } from 'ng2-google-charts';
   styleUrls: ['./statement1.component.css']
 })
 export class Statement1Component implements OnInit {
-  academicYears: string[] = [];
-  termnumbers: [] = [];
-  attendance_details = [];
-  public firstLevelChart: GoogleChartInterface;
+  academic:String[] = [];
+  semester:String[] = [];
+  usn:String = "";
+  email:any ="";
+  event:any;
+  offers:any[] = [];
+  SelectedYear;
+  SelectedSem;
+  attendence:any[];
+  chart_visibility: boolean;
+  showSpinner: boolean;
   title: string;
-  error_message: string
-  error_flag = false
-  chart_visibility = false;
-  terms;
-  selectedyear;
-  user_info;
-  showSpinner = false;
-  constructor(private analyticsService: AnalyticsService, private authService: AuthService) { }
-
+  firstLevelChart : GoogleChartInterface
+  error_flag : boolean = true 
+  error_message = "Data not found"
+  isPlacementOn = false;
+  constructor(private AnalyticsService: AnalyticsService) { }
+  
   ngOnInit() {
-    this.user_info = this.authService.getUserInfo()
-    this.get_academic_years()
-    this.get_term_numbers()
-  }
-  get_academic_years() {
-    this.analyticsService.get_academic_years().subscribe(res => {
-      this.academicYears = res['acdemicYear']
+    this.email = localStorage.getItem("user");
+    let user = JSON.parse(this.email)
+    this.AnalyticsService.get_academic_years().subscribe(res=>{
+      this.academic = res["year"];
+      
+    })
+    this.AnalyticsService.get_semesters().subscribe(res=>{
+      this.semester = res["semesters"];
+      
+    })
+    this.AnalyticsService.get_usn_by_email(user.user).subscribe(res=>{
+      this.usn = res["usn"];
+      console.log(this.usn)
     })
   }
-
-  get_term_numbers() {
-    this.analyticsService.get_term_details().subscribe(res => {
-      this.termnumbers = res['term_numbers']
+  
+  onSearch(event)
+  {
+    if(!this.isPlacementOn){
+      this.getPlacementDetails()
     }
-    )
+    this.generateGraph()
+    
   }
-  searchbutton() {
-    this.showSpinner = true;
-    this.analyticsService.get_attendance_details(this.user_info['usn'], this.selectedyear, this.terms).subscribe(res => {
-      this.attendance_details = res['attendance_percent']
-      this.attendace_data(this.attendance_details)
+  getPlacementDetails(){
+    this.AnalyticsService.get_offer_by_usn(this.SelectedYear ,this.usn).subscribe(res=>{
+      let re = res["offers"];
+      for(let r of re)
+      {
+        this.offers.push([r['companyName'],r['salary']])
+      }
+  })
+  this.isPlacementOn = true
+  }
+  generateGraph(){
+    this.AnalyticsService.get_all_ia_marks(this.SelectedYear,this.usn,this.SelectedSem).subscribe(res=>{
+      let data = [["Subjects","%Marks"]]
+      let marks = res["marks"]
+      console.log(marks)
+      for(let subject of marks){
+        let per = 100 * subject["got"]/subject["max"];
+        
+        data.push([subject["courseName"],per])
+      }
+      this.graph_data(data)
     })
-  }
-  attendace_data(data) {
-    let dataTable = []
-    dataTable.push([
-      "CourseCode",
-      "IA %", { type: 'string', role: 'tooltip' },
-      "Attendance %", { type: 'string', role: 'tooltip' }
-    ]);
-    for (let i = 0; i < data.length; i += 1) {
-      dataTable.push([data[i]['courseCode'],
-      data[i]['avg_ia_score'], "IA % : " + data[i]['avg_ia_score'] + "\n" +
-      "Attendance % : " + data[i]['attendance_per'], data[i]['attendance_per'], "IA % : " + data[i]['avg_ia_score'] + "\n" +
-      "Attendance % : " + data[i]['attendance_per']])
-    }
-    if (dataTable.length > 1) {
-      this.chart_visibility = true
-      this.error_flag = false
-      this.graph_data(dataTable)
-    }
-    else {
-      this.error_flag = true
-      this.error_message = "Data doesnot exist for the entered criteria"
-    }
   }
 
   back_() {
     this.chart_visibility = false
   }
-
-
   graph_data(data) {
-    this.showSpinner = false
-    this.title = 'Course-wise Attendance %',
+    this.showSpinner = true
+    this.title = 'Course-wise Internal Marks %',
       this.firstLevelChart = {
         chartType: "ComboChart",
         dataTable: data,

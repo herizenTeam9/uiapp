@@ -1,48 +1,70 @@
 <div class="container">
-    <div class="row">
-        <div class="col-md-2">
-            <mat-label class="labels">Academic Year</mat-label>
-            <mat-select [(ngModel)]="selectedyear">
-                <mat-option *ngFor="let year of academicYears" [value]="year">{{year}}</mat-option>
-            </mat-select>
-        </div>
-        <div class="col-md-2">
-            <mat-label class="labels">Semesters</mat-label>
-            <mat-select name="terms" multiple [(ngModel)]="terms">
-                <mat-option *ngFor="let terms of termnumbers" [value]="terms">
-                    Semester - {{terms}}
-                </mat-option>
-            </mat-select>
-
-        </div>
-        <div class="col-md-1">
-            <button class="btn btn-primary search search-btn" (click)="searchbutton();" [disabled]=clicked>
+    <div class="row ">
+        <div class="container ">
+            <div class="col-md-2">
+                <mat-form-field>
+                    <mat-label class="labels">Select year</mat-label>
+                    <mat-select name="years" [(ngModel)]="SelectedYear">
+                        <mat-option *ngFor = "let y of academic" [value]="y">{{y}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <!-- <select class="form-control" name="Year" [(ngModel)]="SelectedYear">
+                    <option>Select Year</option>
+                    <option *ngFor = "let y of academic"  >{{y}}</option>
+                </select> -->
+            </div>
+            <div class="col-md-2">
+                <mat-form-field>
+                    <mat-label class="labels">Select sem</mat-label>
+                    <mat-select name="sems" [(ngModel)]="SelectedSem">
+                        <mat-option *ngFor = "let y of semester" [value]="y">{{y}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <!-- <select class="form-control" name="sem" [(ngModel)]="SelectedSem">
+                    <option>Select Semester</option>
+                    <option *ngFor = "let y of semester"  >{{y}}</option>
+                </select> -->
+            </div>
+            <!-- <div class="col-md-3">
+                <button type="button" class="btn btn-default" (click)="onSearch()">
+                    <span class="glyphicon glyphicon-search"></span> Search
+                  </button>
+            </div> -->
+            
+            <div class="col-md-6">
+            <button class="btn btn-primary search search-btn"  (click)="onSearch()">
                 <i class="fa fa-search ml-0"></i> Search
             </button>
-
-        </div>
-        <div class="col-md-6">
-
+            
+            </div>
         </div>
         <div class="col-md-1">
-            <button class="back-button" (click)="back_()" *ngIf="chart_visibility" style="float: right; margin: 10px;">
+            <button class="back-button" (click)="back_()" *ngIf="chart_visibility" style="margin: 10px;">
                 <span class="fa fa-chevron-left"></span> Back</button>
         </div>
     </div>
     <div class="row">
-        <hr>
-
     </div>
-
+    <div class="row" *ngIf="offers && offers.length >0">
+            <div  class="col-md-2" *ngFor="let o of offers">
+                <div class="card-list">
+                        <mat-card class="placement-card">
+                            <mat-card-header>
+                                <mat-card-title>Company : {{o[0]}}</mat-card-title>
+                            </mat-card-header>
+                            <mat-card-content>
+                                Role : Software Engineer<br>
+                                Salary : {{o[1]}}
+                            </mat-card-content>
+                        </mat-card>
+                </div>
+            </div>
+    </div>
+</div>
     <div class="row">
-        <div *ngIf="firstLevelChart && !error_flag && chart_visibility">
+        <div *ngIf="firstLevelChart">
             <p class="page-title"><b>{{title}}</b></p>
             <google-chart [data]='firstLevelChart' (chartSelect)="second_level($event)">
             </google-chart>
         </div>
-        <div *ngIf="error_flag">
-            <p class="page-title">{{error_message}}</p>
-
-        </div>
     </div>
-</div>

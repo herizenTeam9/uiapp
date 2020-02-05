@@ -13,4 +13,11 @@
     font-weight: bold;
   }
 
- 
+ .placement-card{
+   display: inline-block;
+ }
+ .card-list{
+   display: inline-block;
+   border-radius: 4px;
+  box-shadow: 3px 5px maroon ;
+  }
