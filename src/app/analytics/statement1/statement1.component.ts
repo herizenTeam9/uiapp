@@ -33,7 +33,7 @@ export class Statement1Component implements OnInit {
   selectedSubject;
   markDetails:any[];
   closeResult: string;
-
+  facultyChart:GoogleChartInterface
   constructor(private AnalyticsService: AnalyticsService) { }
   
   ngOnInit() {
@@ -133,23 +133,42 @@ export class Statement1Component implements OnInit {
   }
   getEmpChart(empid){
     //get emp subject with marks with year,sem,empid
+    let subs;
+    let data = [["Subject Name","IA score","Placement"]]
     this.AnalyticsService.get_emp_subjects(empid,this.SelectedYear,this.SelectedSem).subscribe(res=>{
-      let d = res["iamarks"]
-      let data = [["Subject Name","%IA score","%Placement"]]
-      for (let sub of d){
-        let temp;
-        //console.log(sub)
+      subs = res["iamarks"]
+    },
+    err=>console.log(err),
+    ()=>{
+      for (let sub of subs){
+        let temp = 0;
+        let placed;
         this.AnalyticsService.get_emp_placement_of_sub(empid,this.SelectedSem,sub["courseName"]).subscribe(deet=>{
-         temp = 100 * deet["placedStudents"] / deet["totalStudents"] 
-        })
-        
-        data.push([d["courseName"],d[""]])
+          placed = deet
+        },
+        err=>console.log(err),
+        ()=>{
+          temp = 100 * placed["placedStudents"] / placed["totalStudents"]
+          let perc = 100 * sub['totalMarks'] /sub["maxMarks"]
+          console.log(typeof(perc),typeof(temp))
+          data.push([sub["courseName"],Math.floor(perc),Math.floor(temp)])
+        }
+        ) 
       }
+      console.log(data)
+      this.graph_data(data)
     })
+    
   }
-
-
+  generateFacultyGraph(data){
+    this.facultyChart = {
+      chartType: 'ColumnChart',
+      dataTable: data,
+      options: {title: 'Countries'}
+    };
+  }
   graph_data(data) {
+    console.log(data)
     this.showSpinner = true
     this.title = 'Course-wise Internal Marks %',
       this.firstLevelChart = {
@@ -187,6 +206,7 @@ export class Statement1Component implements OnInit {
   }
   second_level(event: ChartSelectEvent) {
     if(event.selectedRowValues[0]){
+    $('#iaMarks').modal('toggle')
     this.selectedSubject = event.selectedRowValues[0]
     this.AnalyticsService.get_ia_marks_per_subject(this.SelectedYear,this.usn,this.SelectedSem,this.selectedSubject).subscribe(res=>{
       let allMarks = res["marks"]
@@ -200,3 +220,5 @@ export class Statement1Component implements OnInit {
   }
   }
 }
+//npm i @types/jquery
+// npm install -D @types/bootstrap
