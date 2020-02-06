@@ -11,6 +11,9 @@ import { ChartSelectEvent } from 'ng2-google-charts';
 export class Statement1Component implements OnInit {
   academic:String[] = [];
   semester:String[] = [];
+  departments: String[]=[];
+  selectedDepatment:string;
+  userRoles;
   usn:String = "";
   email:any ="";
   event:any;
@@ -46,6 +49,11 @@ export class Statement1Component implements OnInit {
       this.usn = res["usn"];
       console.log(this.usn)
     })
+    user = localStorage.getItem("user")
+    user = JSON.parse(user)
+    this.userRoles = user.roles;
+    console.log(this.userRoles)
+    console.log("STUDENT" in this.userRoles)
   }
   
   onSearch(event)

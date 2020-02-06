@@ -15,6 +15,18 @@
             </div>
             <div class="col-md-2">
                 <mat-form-field>
+                    <mat-label class="labels">Select Department</mat-label>
+                    <mat-select name="years" [(ngModel)]="selectedDepatment">
+                        <mat-option *ngFor="let y of departments" [value]="y">{{y}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <!-- <select class="form-control" name="Year" [(ngModel)]="SelectedYear">
+                    <option>Select Year</option>
+                    <option *ngFor = "let y of academic"  >{{y}}</option>
+                </select> -->
+            </div>
+            <div class="col-md-2">
+                <mat-form-field>
                     <mat-label class="labels">Select sem</mat-label>
                     <mat-select name="sems" [(ngModel)]="SelectedSem">
                         <mat-option *ngFor="let y of semester" [value]="y">{{y}}</mat-option>
