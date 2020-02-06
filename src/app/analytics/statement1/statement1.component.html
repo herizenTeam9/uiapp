@@ -13,7 +13,7 @@
                     <option *ngFor = "let y of academic"  >{{y}}</option>
                 </select> -->
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2" *ngIf="userRoles.includes('PRINCIPAL')">
                 <mat-form-field>
                     <mat-label class="labels">Select Department</mat-label>
                     <mat-select name="years" [(ngModel)]="selectedDepatment">
@@ -70,16 +70,21 @@
     </div>
 </div>
 <div class="row">
-    <div *ngIf="firstLevelChart">
-        <p class="page-title"><b>{{title}}</b></p>
-        <google-chart [data]='firstLevelChart' (chartSelect)="second_level($event)" data-toggle="modal" data-target="#iaMarks">
-        </google-chart>
+    <div class="col-sm-2 faculty-list" *ngIf="userRoles.includes('HOD') || userRoles.includes('PRINCIPAL')">
+    <button class="mt-4 btn btn-primary btn-md btn-block button-change" *ngFor="let faculty of faculties" (click)="getEmpChart(faculty['employeeGivenId'])">{{faculty['name']}}</button>
+    </div>
+    <div class="col-sm-10">
+        <div *ngIf="firstLevelChart">
+            <p class="page-title"><b>{{title}}</b></p>
+            <google-chart [data]='firstLevelChart' (chartSelect)="second_level($event)" data-toggle="modal" data-target="#iaMarks">
+            </google-chart>
+        </div>
     </div>
 </div>
 
 
 <!-- Modal -->
-<div class="modal fade" id="iaMarks" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="iaMarks" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" data-backdrop="static" data-keyboard="false" *ngIf="selectedSubject">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

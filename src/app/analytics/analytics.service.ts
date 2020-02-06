@@ -34,4 +34,24 @@ export class AnalyticsService {
     let ur = `${this.url}internals/${term}/${usn}/${sem}/${subject}`
     return this.http.get(ur)
   }
+  get_empid(email): Observable<any>{
+    let ur = `${this.url}empid/${email}`
+    return this.http.get(ur)
+  }
+  get_depts(): Observable<any>{
+    let ur = `${this.url}depts`
+    return this.http.get(ur)
+  }
+  get_dept_faculties(dept): Observable<any>{
+    let ur = `${this.url}emps/${dept}`
+    return this.http.get(ur)
+  }
+  get_emp_subjects(empid,term,sem): Observable<any>{
+    let ur = `${this.url}emp/ia/total/${empid}/${term}/${sem}`
+    return this.http.get(ur)
+  }
+  get_emp_placement_of_sub(empid,sem,sub): Observable<any>{
+    let ur = `${this.url}emp/placement/${empid}/${sem}/${sub}`
+    return this.http.get(ur)
+  }
 }
