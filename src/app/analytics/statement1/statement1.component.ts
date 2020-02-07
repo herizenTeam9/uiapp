@@ -9,173 +9,170 @@ import { ChartSelectEvent } from 'ng2-google-charts';
   styleUrls: ['./statement1.component.css']
 })
 export class Statement1Component implements OnInit {
-  academic:String[] = [];
-  semester:String[] = [];
-  departments: String[]=[];
-  selectedDepatment:string;
-  userRoles: String[]=[];
-  usn:String = "";
-  empID:string="";
-  email:any ="";
-  faculties : any;
-  event:any;
-  offers:any[] = [];
+  academic: String[] = [];
+  semester: String[] = [];
+  departments: String[] = [];
+  selectedDepatment: string;
+  userRoles: String[] = [];
+  usn: String = "";
+  empID: string = "";
+  email: any = "";
+  faculties: any;
+  event: any;
+  offers: any[] = [];
   SelectedYear;
   SelectedSem;
-  attendence:any[];
+  attendence: any[];
   chart_visibility: boolean;
   showSpinner: boolean;
   title: string;
-  firstLevelChart : GoogleChartInterface
-  error_flag : boolean = true 
+  firstLevelChart: GoogleChartInterface
+  error_flag: boolean = true
   error_message = "Data not found"
   isPlacementOn = false;
   selectedSubject;
-  markDetails:any[];
+  markDetails: any[];
   closeResult: string;
-  facultyChart:GoogleChartInterface
+  facultyChart: GoogleChartInterface
   constructor(private AnalyticsService: AnalyticsService) { }
-  
+
   ngOnInit() {
     this.email = localStorage.getItem("user");
     let user = JSON.parse(this.email)
     this.userRoles = user.roles;
     this.email = user.user
-    this.AnalyticsService.get_academic_years().subscribe(res=>{
+    this.AnalyticsService.get_academic_years().subscribe(res => {
       this.academic = res["year"];
-      
+
     })
-    this.AnalyticsService.get_semesters().subscribe(res=>{
+    this.AnalyticsService.get_semesters().subscribe(res => {
       this.semester = res["semesters"];
     })
-    if(this.userRoles.includes("STUDENT")){
-      this.AnalyticsService.get_usn_by_email(this.email).subscribe(res=>{
+    if (this.userRoles.includes("STUDENT")) {
+      this.AnalyticsService.get_usn_by_email(this.email).subscribe(res => {
         this.usn = res["usn"];
         console.log(this.usn)
       })
-    }else{
-      this.AnalyticsService.get_empid(this.email).subscribe(res=>{
+    } else {
+      this.AnalyticsService.get_empid(this.email).subscribe(res => {
         this.empID = res["empid"];
-        console.log("EMPID",this.empID)
+        console.log("EMPID", this.empID)
       })
     }
-    if(this.userRoles.includes("PRINCIPAL")){
-      this.AnalyticsService.get_depts().subscribe(res=>{
+    if (this.userRoles.includes("PRINCIPAL")) {
+      this.AnalyticsService.get_depts().subscribe(res => {
         this.departments = res["depts"]
       })
     }
   }
-  onSearch(event)
-  {
-    
-    if(this.userRoles.includes("STUDENT")){
-      if(!this.isPlacementOn){
+  onSearch(event) {
+
+    if (this.userRoles.includes("STUDENT")) {
+      if (!this.isPlacementOn) {
         this.getPlacementDetails()
       }
       this.generateStudentGraph()
     }
-    else if(this.userRoles.includes("PRINCIPAL")){
-      this.AnalyticsService.get_dept_faculties(this.selectedDepatment).subscribe(res=>{
+    else if (this.userRoles.includes("PRINCIPAL")) {
+      this.AnalyticsService.get_dept_faculties(this.selectedDepatment).subscribe(res => {
         let f = res["faculties"]
         console.log(f)
         let data = []
-        for(let a of f){
+        for (let a of f) {
           data.push(a)
         }
         this.faculties = data
       })
       console.log(this.faculties)
     }
-    else if(this.userRoles.includes("HOD")){
+    else if (this.userRoles.includes("HOD")) {
       //see the department and get emps
       let str = this.empID;
       let patt = new RegExp("[a-zA-Z]*");
       let res = patt.exec(str);
       this.selectedDepatment = res[0];
-      this.AnalyticsService.get_dept_faculties(this.selectedDepatment).subscribe(res=>{
+      this.AnalyticsService.get_dept_faculties(this.selectedDepatment).subscribe(res => {
         let f = res["faculties"]
         let data = []
-        for(let a of f){
+        for (let a of f) {
           data.push(a)
         }
         this.faculties = data
       })
       console.log(this.faculties)
     }
-    else if(this.userRoles.includes("FACULTY")){
+    else if (this.userRoles.includes("FACULTY")) {
       //just load his data
       this.getEmpChart(this.empID)
     }
-    
+
   }
-  getPlacementDetails(){
-    this.AnalyticsService.get_offer_by_usn(this.SelectedYear ,this.usn).subscribe(res=>{
+  getPlacementDetails() {
+    this.AnalyticsService.get_offer_by_usn(this.SelectedYear, this.usn).subscribe(res => {
       let re = res["offers"];
-      for(let r of re)
-      {
-        this.offers.push([r['companyName'],r['salary']])
+      for (let r of re) {
+        this.offers.push([r['companyName'], r['salary']])
       }
-  })
-  this.isPlacementOn = true
+    })
+    this.isPlacementOn = true
   }
-  generateStudentGraph(){
-    this.AnalyticsService.get_all_ia_marks(this.SelectedYear,this.usn,this.SelectedSem).subscribe(res=>{
-      let data = [["Subjects","%Marks"]]
+  generateStudentGraph() {
+    this.AnalyticsService.get_all_ia_marks(this.SelectedYear, this.usn, this.SelectedSem).subscribe(res => {
+      let data = [["Subjects", "%Marks"]]
       let marks = res["marks"]
       console.log(marks)
-      for(let subject of marks){
-        let per = 100 * subject["got"]/subject["max"];
-        
-        data.push([subject["courseName"],per])
+      for (let subject of marks) {
+        let per = 100 * subject["got"] / subject["max"];
+
+        data.push([subject["courseName"], per])
       }
       this.graph_data(data)
     })
   }
-  getEmpChart(empid){
+  getEmpChart(empid) {
     //get emp subject with marks with year,sem,empid
+    this.showSpinner=true;
+    this.chart_visibility = false;
     let subs;
-    let data = [["Subject Name","IA score","Placement"]]
-    this.AnalyticsService.get_emp_subjects(empid,this.SelectedYear,this.SelectedSem).subscribe(res=>{
+    let data = [["Subject Name", "IA score", "Placement"]]
+    this.AnalyticsService.get_emp_subjects(empid, this.SelectedYear, this.SelectedSem).subscribe(res => {
       subs = res["iamarks"]
     },
-    err=>console.log(err),
-    ()=>{
-      for (let sub of subs){
-        let temp = 0;
-        let placed;
-        this.AnalyticsService.get_emp_placement_of_sub(empid,this.SelectedSem,sub["courseName"]).subscribe(deet=>{
-          placed = deet
-        },
-        err=>console.log(err),
-        ()=>{
-          temp = 100 * placed["placedStudents"] / placed["totalStudents"]
-          let perc = 100 * sub['totalMarks'] /sub["maxMarks"]
-          console.log(typeof(perc),typeof(temp))
-          data.push([sub["courseName"],Math.floor(perc),Math.floor(temp)])
+      err => console.log(err),
+      () => {
+        for (let sub of subs) {
+          let temp = 0;
+          let placed;
+          this.AnalyticsService.get_emp_placement_of_sub(empid, this.SelectedSem, sub["courseName"]).subscribe(deet => {
+            placed = deet;
+            temp = 100 * placed["placedStudents"] / placed["totalStudents"]
+            let perc = 100 * sub['totalMarks'] / sub["maxMarks"]
+            console.log(typeof (perc), typeof (temp))
+            data.push([sub["courseName"], Math.floor(perc), Math.floor(temp)])
+            this.graph_data(data)
+          }
+          )
         }
-        ) 
       }
-      console.log(data)
-      this.graph_data(data)
-    })
-    
+    )
+
   }
-  generateFacultyGraph(data){
+  generateFacultyGraph(data) {
     this.facultyChart = {
       chartType: 'ColumnChart',
       dataTable: data,
-      options: {title: 'Countries'}
+      options: { title: 'Countries' }
     };
   }
   graph_data(data) {
-    console.log(data)
-    this.showSpinner = true
+    this.showSpinner = false
+    this.chart_visibility = true
     this.title = 'Course-wise Internal Marks %',
       this.firstLevelChart = {
         chartType: "ComboChart",
         dataTable: data,
         options: {
-          focusTarget:'datum',
+          focusTarget: 'datum',
           bar: { groupWidth: "20%" },
           vAxis: {
             title: "Percentage",
@@ -205,19 +202,19 @@ export class Statement1Component implements OnInit {
       }
   }
   second_level(event: ChartSelectEvent) {
-    if(event.selectedRowValues[0]){
-    $('#iaMarks').modal('toggle')
-    this.selectedSubject = event.selectedRowValues[0]
-    this.AnalyticsService.get_ia_marks_per_subject(this.SelectedYear,this.usn,this.SelectedSem,this.selectedSubject).subscribe(res=>{
-      let allMarks = res["marks"]
-      let data = []
-      for(let ia of allMarks){
-        data.push([ia["iaNumber"],ia["outof"],ia["obtained"]])
-      }
-      this.markDetails=data
-      console.log(this.markDetails)
-    })
-  }
+    if (event.selectedRowValues[0]) {
+      $('#iaMarks').modal('toggle')
+      this.selectedSubject = event.selectedRowValues[0]
+      this.AnalyticsService.get_ia_marks_per_subject(this.SelectedYear, this.usn, this.SelectedSem, this.selectedSubject).subscribe(res => {
+        let allMarks = res["marks"]
+        let data = []
+        for (let ia of allMarks) {
+          data.push([ia["iaNumber"], ia["outof"], ia["obtained"]])
+        }
+        this.markDetails = data
+        console.log(this.markDetails)
+      })
+    }
   }
 }
 //npm i @types/jquery
