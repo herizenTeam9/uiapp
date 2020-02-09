@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { AnalyticsService } from '../analytics.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { GoogleChartInterface } from 'ng2-google-charts/google-charts-interfaces';
 import { ChartSelectEvent } from 'ng2-google-charts';
+// import * as bootstrap from "bootstrap";
+// import * as $ from "jquery";
 @Component({
   selector: 'app-statement1',
   templateUrl: './statement1.component.html',
@@ -32,8 +34,11 @@ export class Statement1Component implements OnInit {
   isPlacementOn = false;
   selectedSubject;
   markDetails: any[];
+  selectedEmp : string;
   closeResult: string;
+  placementDetails : any[]
   facultyChart: GoogleChartInterface
+  bottomLine:any;
   constructor(private AnalyticsService: AnalyticsService) { }
 
   ngOnInit() {
@@ -131,6 +136,7 @@ export class Statement1Component implements OnInit {
   }
   getEmpChart(empid) {
     //get emp subject with marks with year,sem,empid
+    this.selectedEmp = empid
     this.showSpinner=true;
     this.chart_visibility = false;
     let subs;
@@ -140,29 +146,13 @@ export class Statement1Component implements OnInit {
     },
       err => console.log(err),
       () => {
-        for (let sub of subs) {
-          let temp = 0;
-          let placed;
-          this.AnalyticsService.get_emp_placement_of_sub(empid, this.SelectedSem, sub["courseName"]).subscribe(deet => {
-            placed = deet;
-            temp = 100 * placed["placedStudents"] / placed["totalStudents"]
-            let perc = 100 * sub['totalMarks'] / sub["maxMarks"]
-            console.log(typeof (perc), typeof (temp))
-            data.push([sub["courseName"], Math.floor(perc), Math.floor(temp)])
-            this.graph_data(data)
-          }
-          )
+        
+        for(let s of subs){
+          console.log(s)
+          data.push([s['courseName'],s['iaPercentage'],s['placePercentage']])
         }
-      }
-    )
-
-  }
-  generateFacultyGraph(data) {
-    this.facultyChart = {
-      chartType: 'ColumnChart',
-      dataTable: data,
-      options: { title: 'Countries' }
-    };
+        this.graph_data(data)
+      })
   }
   graph_data(data) {
     this.showSpinner = false
@@ -176,6 +166,9 @@ export class Statement1Component implements OnInit {
           bar: { groupWidth: "20%" },
           vAxis: {
             title: "Percentage",
+            scaleType: 'linear',
+            maxValue : '100',
+            minValue : '0'
           },
 
           height: 800,
@@ -202,18 +195,50 @@ export class Statement1Component implements OnInit {
       }
   }
   second_level(event: ChartSelectEvent) {
-    if (event.selectedRowValues[0]) {
-      $('#iaMarks').modal('toggle')
-      this.selectedSubject = event.selectedRowValues[0]
-      this.AnalyticsService.get_ia_marks_per_subject(this.SelectedYear, this.usn, this.SelectedSem, this.selectedSubject).subscribe(res => {
-        let allMarks = res["marks"]
-        let data = []
-        for (let ia of allMarks) {
-          data.push([ia["iaNumber"], ia["outof"], ia["obtained"]])
+    if (event.selectedRowValues[0] && event.selectedRowValues[0]!= this.selectedSubject) {
+      if(this.userRoles.includes("STUDENT")){
+        this.selectedSubject = event.selectedRowValues[0]
+        this.AnalyticsService.get_ia_marks_per_subject(this.SelectedYear, this.usn, this.SelectedSem, this.selectedSubject).subscribe(res => {
+          let allMarks = res["marks"]
+          let data = []
+          for (let ia of allMarks) {
+            data.push([ia["iaNumber"], ia["outof"], ia["obtained"]])
+          }
+          this.markDetails = data
+          console.log(this.markDetails)
+        },
+        err=>{},
+        ()=>{
+          $('#iaMarks').modal('toggle')
+        }        
+        )
+      }
+      else{
+        this.selectedSubject = event.selectedRowValues[0]
+        this.AnalyticsService.get_emp_subjects_ia_wise(this.selectedEmp,this.SelectedYear,  this.SelectedSem, this.selectedSubject).subscribe(res => {
+          let allMarks = res["iamarks"]
+          let data = []
+          for (let ia of allMarks) {
+            data.push([ia["iaNumber"],Math.floor( ia["maxMarks"]/ia["students"]), Math.floor(ia["totalMarks"]/ia["students"])])
+          }
+          this.markDetails = data
+        },
+        err=>{},
+        ()=>{
+          this.AnalyticsService.get_emp_placement_of_sub(this.selectedEmp,this.SelectedSem,this.selectedSubject).subscribe(res=>{
+            this.placementDetails = [res['totalStudents'], res['placedStudents'], res['totalPositions']]
+          },
+          err=>{},
+          ()=>{
+            $('#iaMarks').modal('toggle')
+          }
+          )
         }
-        this.markDetails = data
-        console.log(this.markDetails)
-      })
+        )
+      }
+    }
+    else if(this.selectedSubject){
+      $('#iaMarks').modal('toggle')
     }
   }
 }

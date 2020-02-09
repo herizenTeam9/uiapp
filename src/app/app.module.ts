@@ -13,7 +13,6 @@ import { TokenInterceptor } from './auth/auth.interceptor';
 import { LoginComponent } from './login/login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSelectModule } from '@angular/material/select';
-
 import { Ng2GoogleChartsModule } from 'ng2-google-charts';
 
 
@@ -34,8 +33,8 @@ import { Ng2GoogleChartsModule } from 'ng2-google-charts';
     FormsModule,
     MatSelectModule,
     Ng2GoogleChartsModule,
-    BrowserAnimationsModule
-
+    BrowserAnimationsModule,
+    
     
   ],
   providers: [CommonHeaderService,

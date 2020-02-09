@@ -29,5 +29,7 @@
   .button-change
   {
     display: block;
-    
+  }
+  .modal-body{
+    height: 250px !important;
   }

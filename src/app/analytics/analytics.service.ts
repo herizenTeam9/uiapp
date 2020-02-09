@@ -50,6 +50,10 @@ export class AnalyticsService {
     let ur = `${this.url}emp/ia/total/${empid}/${term}/${sem}`
     return this.http.get(ur)
   }
+  get_emp_subjects_ia_wise(empid,term,sem,subject): Observable<any>{
+    let ur = `${this.url}emp/ia/${empid}/${term}/${sem}/${subject}`
+    return this.http.get(ur)
+  }
   get_emp_placement_of_sub(empid,sem,sub): Observable<any>{
     let ur = `${this.url}emp/placement/${empid}/${sem}/${sub}`
     return this.http.get(ur)
