@@ -56,12 +56,12 @@ export class Statement1Component implements OnInit {
     if (this.userRoles.includes("STUDENT")) {
       this.AnalyticsService.get_usn_by_email(this.email).subscribe(res => {
         this.usn = res["usn"];
-        console.log(this.usn)
+       // console.log(this.usn)
       })
     } else {
       this.AnalyticsService.get_empid(this.email).subscribe(res => {
         this.empID = res["empid"];
-        console.log("EMPID", this.empID)
+       // console.log("EMPID", this.empID)
       })
     }
     if (this.userRoles.includes("PRINCIPAL")) {
@@ -81,14 +81,14 @@ export class Statement1Component implements OnInit {
     else if (this.userRoles.includes("PRINCIPAL")) {
       this.AnalyticsService.get_dept_faculties(this.selectedDepatment).subscribe(res => {
         let f = res["faculties"]
-        console.log(f)
+        //console.log(f)
         let data = []
         for (let a of f) {
           data.push(a)
         }
         this.faculties = data
       })
-      console.log(this.faculties)
+      //console.log(this.faculties)
     }
     else if (this.userRoles.includes("HOD")) {
       //see the department and get emps
@@ -104,7 +104,7 @@ export class Statement1Component implements OnInit {
         }
         this.faculties = data
       })
-      console.log(this.faculties)
+      //console.log(this.faculties)
     }
     else if (this.userRoles.includes("FACULTY")) {
       //just load his data
@@ -125,7 +125,7 @@ export class Statement1Component implements OnInit {
     this.AnalyticsService.get_all_ia_marks(this.SelectedYear, this.usn, this.SelectedSem).subscribe(res => {
       let data = [["Subjects", "%Marks"]]
       let marks = res["marks"]
-      console.log(marks)
+     // console.log(marks)
       for (let subject of marks) {
         let per = 100 * subject["got"] / subject["max"];
 
@@ -152,11 +152,11 @@ export class Statement1Component implements OnInit {
     this.AnalyticsService.get_emp_subjects(empid, this.SelectedYear, this.SelectedSem).subscribe(res => {
       subs = res["iamarks"]
     },
-      err => console.log(err),
+      err => {},
       () => {
         
         for(let s of subs){
-          console.log(s)
+          //console.log(s)
           data.push([s['courseName'],s['iaPercentage'],s['placePercentage']])
         }
         if(data.length > 1){
@@ -186,7 +186,7 @@ export class Statement1Component implements OnInit {
             minValue : '0'
           },
 
-          height: 700,
+          height: 600,
           hAxis: {
             title: "Courses",
             titleTextStyle: {
@@ -221,7 +221,7 @@ export class Statement1Component implements OnInit {
             data.push([ia["iaNumber"], ia["outof"], ia["obtained"]])
           }
           this.markDetails = data
-          console.log(this.markDetails)
+          //console.log(this.markDetails)
         },
         err=>{},
         ()=>{

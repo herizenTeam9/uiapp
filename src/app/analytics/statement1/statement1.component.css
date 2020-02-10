@@ -33,3 +33,21 @@
   .modal-body{
     height: 250px !important;
   }
+  .sc{
+    max-height: 620px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+  .text-left
+{
+  text-align: left;
+}
+.font-weight-bold{
+  font-weight: bold;
+}
+.center{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /* transform: translate(50%,50%); */
+}
