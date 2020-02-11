@@ -71,9 +71,13 @@
     </div>
 </div><br>
 <div class="row">
-    <div class="col-sm-2 faculty-list" *ngIf="userRoles.includes('HOD') || userRoles.includes('PRINCIPAL')">
-        <button class="mt-4 btn btn-primary btn-md btn-block button-change" *ngFor="let faculty of faculties"
+    <div class="col-sm-2 faculty-list text-left" *ngIf="userRoles.includes('HOD') || userRoles.includes('PRINCIPAL')">
+        <div *ngIf="faculties && faculties.length>0" class="h4 font-weight-bold">Faculties</div>
+        <div class="sc">
+
+            <button class="mt-4 btn btn-primary btn-md btn-block button-change text-left text-uppercase" *ngFor="let faculty of faculties"
             (click)="getEmpChart(faculty['employeeGivenId'])">{{faculty['name']}}</button>
+        </div>
     </div>
     <div class="col-sm-10" *ngIf="chart_visibility">
         <div *ngIf="firstLevelChart">
@@ -82,10 +86,11 @@
             </google-chart>
         </div>
     </div>
-    <div class="col-sm-10" *ngIf="showSpinner">
+    <div class="col-sm-10 center" *ngIf="showSpinner">
         <mat-spinner></mat-spinner>
     </div>
     <div class="col-sm-10" *ngIf="error_flag">
+    <div class="col-sm-10 center" *ngIf="error_flag">
         <h2>Data Not Found !!</h2>
     </div>
    
@@ -119,7 +124,7 @@
                     </tr>
                 </table>
                 <hr>
-                <div *ngIf="!userRoles.includes('STUDENT')">
+                <div *ngIf="placementDetails && !userRoles.includes('STUDENT')">
                     <div class="col-sm-4"><b># Students : </b>{{placementDetails[0]}}</div>
                     <div class="col-sm-4"><b># Placed Students : </b>{{placementDetails[1]}}</div>
                     <div class="col-sm-4"><b># Offers : </b>{{placementDetails[2]}}</div>
