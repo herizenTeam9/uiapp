@@ -6,8 +6,8 @@
         <nav class="navbar navbar-fixed-top" style="height: 50px;">
          <div class="container-fluid">
              <ul class="nav navbar-nav navbar-right">
-                 <li><a href="#"><span class="glyphicon glyhicon-use" *ngIf="user">&nbsp;<font size="4">{{user.user}}</font></span></a></li>
-                 <li><a href=""><i class="fa-users"(click)="logOut()"></i>Logout</a></li>
+                 <li><a href="#"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;{{user.user}}</a></li>
+                 <li><a href=""><i class="fa fa-power-off"(click)="logOut()"></i>&nbsp;Logout</a></li>
              </ul>
          </div>
          </nav>

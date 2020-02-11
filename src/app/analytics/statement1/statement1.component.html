@@ -71,10 +71,9 @@
     </div>
 </div><br>
 <div class="row">
-    <div class="col-sm-2 faculty-list text-left" *ngIf="userRoles.includes('HOD') || userRoles.includes('PRINCIPAL')">
-        <div *ngIf="faculties && faculties.length>0" class="h4 font-weight-bold">Faculties</div>
-        <div class="sc">
-
+    <div id="" class="col-sm-2 faculty-list text-left" *ngIf="userRoles.includes('HOD') || userRoles.includes('PRINCIPAL')">
+        <div *ngIf="allFaculties && allFaculties.length>0" class="h4 font-weight-bold">Faculties <br><br><input class="form-control" type="text" [(ngModel)]="searchStr" (input)="updateFacultyList()"></div>
+        <div class="sc" id="fac">
             <button class="mt-4 btn btn-primary btn-md btn-block button-change text-left text-uppercase" *ngFor="let faculty of faculties"
             (click)="getEmpChart(faculty['employeeGivenId'])">{{faculty['name']}}</button>
         </div>

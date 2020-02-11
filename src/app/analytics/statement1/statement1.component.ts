@@ -20,6 +20,7 @@ export class Statement1Component implements OnInit {
   empID: string = "";
   email: any = "";
   faculties: any;
+  allFaculties:any
   event: any;
   offers: any[] = [];
   SelectedYear;
@@ -34,6 +35,7 @@ export class Statement1Component implements OnInit {
   isPlacementOn = false;
   selectedSubject;
   markDetails: any[];
+  searchStr:any;
   selectedEmp : string;
   closeResult: string;
   placementDetails : any[]
@@ -103,6 +105,7 @@ export class Statement1Component implements OnInit {
           data.push(a)
         }
         this.faculties = data
+        this.allFaculties = this.faculties
       })
       //console.log(this.faculties)
     }
@@ -112,6 +115,22 @@ export class Statement1Component implements OnInit {
     }
 
   }
+  updateFacultyList(){
+    let fa = this.allFaculties
+    let newfa = []
+    var regex = new RegExp(`^${this.searchStr}.*`, "i"); 
+    for(let f of fa){
+      let rex = regex.test(f['name'])
+      console.log(rex)
+      if(rex){
+        newfa.push(f)
+      }
+    }
+    console.log(newfa)
+    this.faculties = newfa;
+    
+  }
+
   getPlacementDetails() {
     this.AnalyticsService.get_offer_by_usn(this.SelectedYear, this.usn).subscribe(res => {
       let re = res["offers"];
@@ -208,7 +227,6 @@ export class Statement1Component implements OnInit {
         }
 
       }
-     
   }
   second_level(event: ChartSelectEvent) {
     if (event.selectedRowValues[0] && event.selectedRowValues[0]!= this.selectedSubject) {
