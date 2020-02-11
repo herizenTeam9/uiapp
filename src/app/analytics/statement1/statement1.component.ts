@@ -139,6 +139,7 @@ export class Statement1Component implements OnInit {
       }
     })
     this.isPlacementOn = true
+    
   }
   generateStudentGraph() {
     this.AnalyticsService.get_all_ia_marks(this.SelectedYear, this.usn, this.SelectedSem).subscribe(res => {

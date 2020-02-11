@@ -46,6 +46,9 @@
 {
   text-align: left;
 }
+.text-cap{
+  text-transform: capitalize;
+}
 .font-weight-bold{
   font-weight: bold;
 }
