@@ -23,6 +23,7 @@
   }
   .faculty-list{
     display: block;
+  
 
   }
 
@@ -32,4 +33,7 @@
   }
   .modal-body{
     height: 250px !important;
+  }
+  .element.style{
+    margin-top:20%;
   }

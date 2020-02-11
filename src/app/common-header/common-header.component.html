@@ -4,12 +4,12 @@
             <img src="assets/images/heraizen_logo.png" class="logo" />
         </a>
         <nav class="navbar navbar-fixed-top" style="height: 50px;">
-            <a href="#" class="sidebar-toggle" data-toggle="control-sidebar" role="button" (click)="resize()">
-                <span class="sr-only">Toggle navigation</span>
-            </a>
-            <span style=" color:#ffffff !important; margin-left: 1030px;" *ngIf="user">{{user.user}}
-            </span>
-            <i style=" color:#ffffff !important;" class="fas fa-sign-out-alt ml-auto" (click)="logOut()"></i>
-        </nav>
-    </header>
-</div>y
+         <div class="container-fluid">
+             <ul class="nav navbar-nav navbar-right">
+                 <li><a href="#"><span class="glyphicon glyhicon-use" *ngIf="user">&nbsp;<font size="4">{{user.user}}</font></span></a></li>
+                 <li><a href=""><i class="fa-users"(click)="logOut()"></i>Logout</a></li>
+             </ul>
+         </div>
+         </nav>
+         </header>
+         </div>

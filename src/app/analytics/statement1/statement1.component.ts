@@ -3,8 +3,8 @@ import { AnalyticsService } from '../analytics.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { GoogleChartInterface } from 'ng2-google-charts/google-charts-interfaces';
 import { ChartSelectEvent } from 'ng2-google-charts';
-// import * as bootstrap from "bootstrap";
-// import * as $ from "jquery";
+
+declare var $: any;
 @Component({
   selector: 'app-statement1',
   templateUrl: './statement1.component.html',
@@ -29,7 +29,7 @@ export class Statement1Component implements OnInit {
   showSpinner: boolean;
   title: string;
   firstLevelChart: GoogleChartInterface
-  error_flag: boolean = true
+  error_flag: boolean = false
   error_message = "Data not found"
   isPlacementOn = false;
   selectedSubject;
@@ -131,7 +131,15 @@ export class Statement1Component implements OnInit {
 
         data.push([subject["courseName"], per])
       }
-      this.graph_data(data)
+      if(data.length > 1){
+        this.graph_data(data)
+        
+        this.error_flag = false
+      }
+      else{
+        this.showSpinner = false
+        this.error_flag = true
+      }
     })
   }
   getEmpChart(empid) {
@@ -151,7 +159,14 @@ export class Statement1Component implements OnInit {
           console.log(s)
           data.push([s['courseName'],s['iaPercentage'],s['placePercentage']])
         }
-        this.graph_data(data)
+        if(data.length > 1){
+          this.graph_data(data)
+          this.error_flag = false
+        }
+        else{
+          this.showSpinner = false
+          this.error_flag = true
+        }
       })
   }
   graph_data(data) {
@@ -171,7 +186,7 @@ export class Statement1Component implements OnInit {
             minValue : '0'
           },
 
-          height: 800,
+          height: 700,
           hAxis: {
             title: "Courses",
             titleTextStyle: {
@@ -193,6 +208,7 @@ export class Statement1Component implements OnInit {
         }
 
       }
+     
   }
   second_level(event: ChartSelectEvent) {
     if (event.selectedRowValues[0] && event.selectedRowValues[0]!= this.selectedSubject) {
