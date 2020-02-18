@@ -89,6 +89,7 @@ export class Statement1Component implements OnInit {
           data.push(a)
         }
         this.faculties = data
+        this.allFaculties = this.faculties
       })
       //console.log(this.faculties)
     }
